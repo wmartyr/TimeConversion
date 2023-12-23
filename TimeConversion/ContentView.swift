@@ -11,6 +11,7 @@ struct ContentView: View {
     @State private var inputUnit = ""
     @State private var outputUnit = ""
     @State private var inputValue = 0
+    @FocusState private var inputFieldIsFocused:Bool
     
     let units = ["seconds", "minutes", "hours", "days"]
     
@@ -45,6 +46,8 @@ struct ContentView: View {
             Form {
                 Section("Enter Time") {
                     TextField("Value", value: $inputValue, format: .number)
+                        .keyboardType(.decimalPad)
+                        .focused($inputFieldIsFocused)
                     Picker("Input Time Unit", selection: $inputUnit) {
                         ForEach(units, id:\.self) {
                             Text($0)
@@ -64,6 +67,13 @@ struct ContentView: View {
                 
             }
             .navigationTitle("Time Converter")
+            .toolbar {
+                if inputFieldIsFocused {
+                    Button("Done") {
+                        inputFieldIsFocused = false
+                    }
+                }
+            }
         }
     }
 }
